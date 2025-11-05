@@ -38,10 +38,10 @@ class vec3 {
         }
 
         double length() const {
-            return std::sqrt(length_squared());
+            return std::sqrt(lengthSquared());
         }
 
-        double length_squared() const {
+        double lengthSquared() const {
             return e[0]*e[0] + e[1]*e[1] + e[2]*e[2];
         }
 };
