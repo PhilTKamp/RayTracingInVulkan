@@ -1,28 +1,17 @@
+#include "rtweekend.h"
 #include "color.h"
 #include "ray.h"
 #include "vec3.h"
+#include "hittable.h"
+#include "hittableList.h"
+#include "sphere.h"
 
 #include <iostream>
 
-double hitSphere(const point3& center, double radius, const ray& r) {
-    vec3 oc = center - r.origin();
-    auto a = r.direction().lengthSquared();
-    auto h = dot(r.direction(), oc);
-    auto c = oc.lengthSquared() - radius * radius;
-    auto discriminant = h*h - a*c;
-
-    if (discriminant < 0) {
-        return -1.0;
-    } else {
-        return (h - std::sqrt(discriminant)) / a;
-    }
-}
-
-color rayColor(const ray& r) {
-    auto t = hitSphere(point3(0,0,-1), 0.5, r);
-    if (t > 0.0) {
-        vec3 N = unitVector(r.at(t) - vec3(0,0,-1));
-        return 0.5*color(N.x()+1, N.y()+1, N.z()+1);
+color rayColor(const ray& r, const hittable& world) {
+    hitRecord rec;
+    if (world.hit(r, 0, infinity, rec)){
+        return 0.5 * (rec.normal + color(1,1,1));
     }
     
     vec3 unitDirection = unitVector(r.direction());
@@ -38,6 +27,10 @@ int main() {
 
     int imageHeight = int(imageWidth / aspectRatio);
     imageHeight = (imageHeight < 1) ? 1 : imageHeight;
+
+    hittableList world;
+    world.add(make_shared<sphere>(point3(0,0,-1), 0.5));
+    world.add(make_shared<sphere>(point3(0, -100.5, -1), 100));
 
     auto focalLength = 1.0;
     auto viewportHeight = 2.0;
@@ -64,7 +57,8 @@ int main() {
             auto pixelCenter = pixel00Loc + (i*pixelDeltaU) + (j*pixelDeltaV);
             auto rayDirection = pixelCenter - cameraCenter;
             ray r(cameraCenter, rayDirection);
-            color pixelColor = rayColor(r);
+
+            color pixelColor = rayColor(r, world);
             writeColor(std::cout, pixelColor);
         }
     }
