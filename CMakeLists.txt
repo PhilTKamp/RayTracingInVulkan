@@ -23,7 +23,7 @@ set ( SOURCE_ONE_WEEKEND
   src/InOneWeekend/main.cpp
 #   src/InOneWeekend/camera.h
   src/InOneWeekend/color.h
-#   src/InOneWeekend/hittable.h
+  src/InOneWeekend/hittable.h
 #   src/InOneWeekend/hittable_list.h
 #   src/InOneWeekend/interval.h
 #   src/InOneWeekend/material.h
