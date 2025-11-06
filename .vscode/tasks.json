@@ -2,7 +2,7 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "cmake build",
+            "label": "cmake build (Debug)",
             "type": "shell",
             "options": {
                 "cwd": "${workspaceRoot}"
@@ -10,14 +10,14 @@
             "command": "cmake",
             "args": [
                 "--build",
-                "build/"
+                "build/Debug"
             ],
             "problemMatcher": [],
         },
         {
             "label": "Generate Image",
             "type": "shell",
-            "command": "./build/inOneWeekend",
+            "command": "./build/Debug/inOneWeekend",
             "args": [
                 ">",
                 "image.ppm"
@@ -32,6 +32,16 @@
                 "${workspaceRoot}/image.ppm"
             ],
             "problemMatcher": [],
+        },
+        {
+            "label": "Compile, Generate, and View image",
+            "dependsOn": [
+                "cmake build (Debug)",
+                "Generate Image",
+                "View image",
+            ],
+            "dependsOrder": "sequence",
+            "problemMatcher": []
         }
     ]
 }
