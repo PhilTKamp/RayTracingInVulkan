@@ -47,6 +47,10 @@ class vec3 {
             return e[0]*e[0] + e[1]*e[1] + e[2]*e[2];
         }
 
+        bool nearZero(double precision = 1e-8) const {
+            return (std::fabs(e[0]) < precision) && (std::fabs(e[1]) < precision) && (std::fabs(e[2]) < precision);
+        }
+
         static vec3 random() {
             return vec3(randomDouble(), randomDouble(), randomDouble());
         }
