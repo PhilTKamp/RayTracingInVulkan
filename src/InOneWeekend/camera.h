@@ -100,7 +100,7 @@ private:
 
         if (world.hit(r, interval(0.001, infinity), rec))
         {
-            vec3 direction = randomOnHemisphere(rec.normal);
+            vec3 direction = rec.normal + randomUnitVector();
             return 0.5 * rayColor(ray(rec.p, direction), depth - 1, world);
         }
 
