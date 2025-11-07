@@ -65,10 +65,10 @@ class dielectric : public material {
             double cosTheta = std::fmin(dot(-unitDirection, rec.normal), 1.0);
             double sinTheta = std::sqrt(1.0 - cosTheta * cosTheta);
 
-            bool canRefract = ri * sinTheta <= 1.0;
+            bool cannotRefract = ri * sinTheta > 1.0;
             vec3 direction;
 
-            if (canRefract) {
+            if (cannotRefract || reflectance(cosTheta, ri) > randomDouble()) {
                 direction = reflect(unitDirection, rec.normal);
             } else {
                 direction = refract(unitDirection, rec.normal, ri);
@@ -80,6 +80,13 @@ class dielectric : public material {
 
     private:
         double refractiveIndex;
+
+        static double reflectance(double cosine, double refractiveIndex) {
+            // Use Schlick's approx. for reflectance.
+            auto r0 = (1 - refractiveIndex) / (1 + refractiveIndex);
+            r0 = r0*r0;
+            return r0 + (1 - r0)*std::pow((1 - cosine), 5);
+        }
 };
 
 #endif
