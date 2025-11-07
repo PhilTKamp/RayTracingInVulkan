@@ -88,7 +88,8 @@ class camera {
             hitRecord rec;
 
             if (world.hit(r, interval(0, infinity), rec)){
-                return 0.5 * (rec.normal + color(1,1,1));
+                vec3 direction = randomOnHemisphere(rec.normal);
+                return 0.5 * rayColor(ray(rec.p, direction), world);
             }
             
             vec3 unitDirection = unitVector(r.direction());

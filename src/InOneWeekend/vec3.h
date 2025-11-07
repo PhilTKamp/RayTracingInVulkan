@@ -1,6 +1,8 @@
 #ifndef VEC3_H
 #define VEC3_H
 
+
+#include "rtweekend.h"
 #include <cmath>
 #include <iostream>
 
@@ -44,6 +46,15 @@ class vec3 {
         double lengthSquared() const {
             return e[0]*e[0] + e[1]*e[1] + e[2]*e[2];
         }
+
+        static vec3 random() {
+            return vec3(randomDouble(), randomDouble(), randomDouble());
+        }
+
+        static vec3 random(double min, double max) {
+            return vec3(randomDouble(min, max), randomDouble(min, max), randomDouble(min, max));
+        }
+
 };
 
 // Aliasing for clarity
@@ -95,4 +106,27 @@ inline vec3 cross(const vec3& u, const vec3& v) {
 inline vec3 unitVector(const vec3& v) {
     return v / v.length();
 }
+
+inline vec3 randomUnitVector() {
+    while (true) {
+        auto p = vec3::random(-1, 1);
+        auto len = p.length();
+        auto lensq = len * len;
+        if (1e-160 < lensq && lensq <= 1) {
+            return p / len;
+        }
+    }
+}
+
+inline vec3 randomOnHemisphere(const vec3& normal) {
+    vec3 onUnitSphere = randomUnitVector();
+
+    if (dot(onUnitSphere, normal) > 0.0) { // In the same hemisphere as the normal
+        return onUnitSphere;
+    } else {
+        return -onUnitSphere;
+    }
+
+}
+
 #endif
