@@ -13,6 +13,8 @@ public:
     int samplesPerPixel = 10; // Count of random samples for each pixel
     int maxDepth = 10;        // Maximum number of ray bounces in the scene
 
+    double vFov = 90; // Vertical view angle (field of view)
+
     void render(const hittable &world)
     {
         initialize();
@@ -56,8 +58,12 @@ private:
         pixelSamplesScale = 1.0 / samplesPerPixel;
 
         center = point3(0, 0, 0);
+
+        // Calculate viewport dimensions
         auto focalLength = 1.0;
-        auto viewportHeight = 2.0;
+        auto theta = degreesToRadians(vFov);
+        auto h = std::tan(theta / 2);
+        auto viewportHeight = 2 * h * focalLength;
         auto viewportWidth = viewportHeight * (double(imageWidth) / imageHeight);
         auto cameraCenter = point3(0, 0, 0);
 
@@ -93,7 +99,8 @@ private:
 
     color rayColor(const ray &r, int depth, const hittable &world) const
     {
-        if (depth <= 0) {
+        if (depth <= 0)
+        {
             return color(0, 0, 0);
         }
 
@@ -103,8 +110,9 @@ private:
         {
             ray scattered;
             color attentuation;
-            if (rec.mat->scatter(r, rec, attentuation, scattered)) {
-                return attentuation * rayColor(scattered, depth-1, world);
+            if (rec.mat->scatter(r, rec, attentuation, scattered))
+            {
+                return attentuation * rayColor(scattered, depth - 1, world);
             }
 
             return color(0, 0, 0);
