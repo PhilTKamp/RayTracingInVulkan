@@ -21,6 +21,11 @@ class lambertian : public material {
 
         bool scatter(const ray& rIn, const hitRecord& rec, color& attentuation, ray& scattered) const override {
             auto scatterDirection = rec.normal + randomUnitVector();
+
+            if (scatterDirection.nearZero()) {
+                scatterDirection = rec.normal;
+            }
+
             scattered = ray(rec.p, scatterDirection);
             attentuation = albedo;
             return true;
