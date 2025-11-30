@@ -1,7 +1,8 @@
-#include <iostream>
+#include "RayTracingApplication.hpp"
 
 int main() {
-  std::cout << "Hello world!" << std::endl;
+  RayTracingApplication app;
+  app.run();
 
   return 0;
 }
