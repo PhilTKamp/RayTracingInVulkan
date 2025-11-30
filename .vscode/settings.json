@@ -1,0 +1,6 @@
+{
+  "clangd.arguments": [],
+  "clangd.fallbackFlags": [
+    "-std=c++20"
+  ]
+}
